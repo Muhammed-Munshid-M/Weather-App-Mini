@@ -4,20 +4,21 @@ import { useEffect } from 'react'
 import axios from 'axios'
 
 function Home() {
-  const [data,setData] = useState({
-    celcius: 10,
-    name: 'London',
-    humidity: 10,
-    speed: 2,
-    image: ''
-  })
+  const [data,setData] = useState({})
   const [name,setName] = useState('')
+  const [lat, setLat] = useState([]);
+  const [long, setLong] = useState([]);
   const [error, setError] = useState('')
-  const API_URL = 'https://api.openweathermap.org/data/2.5'
-  const API_KEY = '2b665bb1cc4bb5a72ad37b9a0a506ebf'
+  const API_URL = import.meta.env.VITE_API_URL
+  const API_KEY = import.meta.env.VITE_API_KEY;
 
   useEffect(()=> {
-    axios.get(`${API_URL}/weather/?q=calicut&appid=${API_KEY}&units=metric`)
+    const fetchData = async () => {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        setLat(position.coords.latitude);
+        setLong(position.coords.longitude);
+      });
+    await axios.get(`${API_URL}/weather/?lat=${lat}&lon=${long}&appid=${API_KEY}&units=metric`)
     .then(res => {
       let imagePath = '';
       if(res.data.weather[0].main == 'Clouds') {
@@ -38,17 +39,13 @@ function Home() {
         humidity: res.data.main.humidity, speed: res.data.wind.speed,
         image: imagePath})
     })
-    .catch(err =>{
-      // if (err.response.status == 404) {
-      //   setError("Invalid City Name")
-      // } else {
-      //   setError('')
-      // }
-      console.log(err)
-    })
-  }, [])
+    .catch(err => console.log(err))
+  }
+    fetchData();
+  }, [lat,long])
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.preventDefault()
     if (name !== '') {
       axios.get(`${API_URL}/weather/?q=${name}&appid=${API_KEY}&units=metric`)
       .then(res => {
@@ -85,8 +82,10 @@ function Home() {
     <div className="container">
       <div className="weather">
         <div className="search">
+          <form>
             <input type="text" placeholder="Enter City Name" onChange={e => setName(e.target.value)}/>
-            <button><img width='18px' height='20px' src="/search-icon.png" onClick={handleClick} alt="" /></button>
+            <button type='submit' onClick={handleClick}><img width='18px' height='20px' src="/search-icon.png" alt="" /></button>
+          </form>
         </div>
         <div className="error">
           <p>{error}</p>
