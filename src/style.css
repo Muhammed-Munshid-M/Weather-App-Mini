@@ -90,3 +90,16 @@
     margin-top: 2px;
     margin-left: 10px;
 }
+
+.suggestion {
+    background-color: rgb(70, 67, 67);
+    margin-top:'1px';
+    margin-right: 60px;
+    border-bottom: 10px;
+    border-color: aqua;
+}
+
+.suggestion-main {
+    margin-top: 8px;
+    cursor: pointer;
+}
