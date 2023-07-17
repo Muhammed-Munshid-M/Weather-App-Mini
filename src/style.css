@@ -2,7 +2,7 @@
     width: 100%;
     height: 100vh;
     padding-top: 1px;
-    background-image: url('./weather.jpg');
+    background-image: url('https://pixabay.com/get/g8c367fbb0ae5d1d7d443fec0ace7f50238dae813d6a32eb9056120275423594013f4539d9515634e4b27517577f5388a4a0e9819baac8bc2eb19ee79547301b8_1280.jpg');
     background-size: cover;
 }
 
